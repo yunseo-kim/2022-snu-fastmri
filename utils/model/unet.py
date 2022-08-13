@@ -10,14 +10,14 @@ class Unet(nn.Module):
         self.in_chans = in_chans
         self.out_chans = out_chans
 
-        self.first_block = ConvBlock(in_chans, 5)
-        self.down1 = Down(5, 20)
-        self.down2 = Down(20, 80)
-        self.down3 = Down(80, 320)
-        self.up1 = Up(320, 80)
-        self.up2 = Up(80, 20)
-        self.up3 = Up(20, 5)
-        self.last_block = nn.Conv2d(5, out_chans, kernel_size=1)
+        self.first_block = ConvBlock(in_chans, 8)
+        self.down1 = Down(8, 32)
+        self.down2 = Down(32, 128)
+        self.down3 = Down(128, 512)
+        self.up1 = Up(512, 128)
+        self.up2 = Up(128, 32)
+        self.up3 = Up(32, 8)
+        self.last_block = nn.Conv2d(8, out_chans, kernel_size=1)
 
     def norm(self, x):
         b, h, w = x.shape
