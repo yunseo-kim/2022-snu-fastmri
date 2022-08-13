@@ -11,10 +11,12 @@ class Unet(nn.Module):
         self.out_chans = out_chans
 
         self.first_block = ConvBlock(in_chans, 5)
-        self.down1 = Down(5, 40)
-        self.down2 = Down(40, 320)
-        self.up1 = Up(320, 40)
-        self.up2 = Up(40, 5)
+        self.down1 = Down(5, 20)
+        self.down2 = Down(20, 80)
+        self.down3 = Down(80, 320)
+        self.up1 = Up(320, 80)
+        self.up2 = Up(80, 20)
+        self.up3 = Up(20, 5)
         self.last_block = nn.Conv2d(5, out_chans, kernel_size=1)
 
     def norm(self, x):
@@ -33,10 +35,12 @@ class Unet(nn.Module):
         input = input.unsqueeze(1)
         d1 = self.first_block(input)
         d2 = self.down1(d1)
-        m0 = self.down2(d2)
-        u1 = self.up1(m0, d2)
-        u2 = self.up2(u1, d1)
-        output = self.last_block(u2)
+        d3 = self.down2(d2)
+        m0 = self.down3(d3)
+        u1 = self.up1(m0, d3)
+        u2 = self.up2(u1, d2)
+        u3 = self.up3(u2, d1)
+        output = self.last_block(u3)
         output = output.squeeze(1)
         output = self.unnorm(output, mean, std)
 
@@ -83,7 +87,7 @@ class Up(nn.Module):
         super().__init__()
         self.in_chans = in_chans
         self.out_chans = out_chans
-        self.up = nn.ConvTranspose2d(in_chans, in_chans // 8 * 7, kernel_size=2, stride=2)
+        self.up = nn.ConvTranspose2d(in_chans, in_chans // 4 * 3, kernel_size=2, stride=2)
         self.conv = ConvBlock(in_chans, out_chans)
 
     def forward(self, x, concat_input):
