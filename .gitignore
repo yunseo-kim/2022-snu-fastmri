@@ -1,6 +1,7 @@
 references/
 FastMRI_Baseline_GPU.zip
 result/**/reconstructions_val/
+result/**/reconstructions_forward/
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos
