@@ -9,7 +9,7 @@ def parse():
     parser.add_argument('-g', '--GPU_NUM', type=int, default=0, help='GPU number to allocate')
     parser.add_argument('-b', '--batch-size', type=int, default=4, help='Batch size')
     parser.add_argument('-n', '--net_name', type=Path, default='test_Unet', help='Name of network')
-    parser.add_argument('-p', '--data_path', type=Path, default='../Data/image_Leaderboard/',
+    parser.add_argument('-p', '--data_path', type=Path, default='../input/leaderboard/image/',
                         help='Directory of test data')
 
     parser.add_argument('--in-chans', type=int, default=1, help='Size of input channels for network')
@@ -22,8 +22,8 @@ def parse():
 
 if __name__ == '__main__':
     args = parse()
-    args.exp_dir = '../result' / args.net_name / 'checkpoints'
-    args.forward_dir = '../result' / args.net_name / 'reconstructions_forward'
+    args.exp_dir = './result' / args.net_name / 'checkpoints'
+    args.forward_dir = './result' / args.net_name / 'reconstructions_forward'
     print(args.forward_dir)
     forward(args)
 
