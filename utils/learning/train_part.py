@@ -10,6 +10,21 @@ from utils.common.utils import save_reconstructions, ssim_loss
 from utils.common.loss_function import SSIMLoss
 from utils.model.unet import Unet
 
+import sys
+log_count = 0
+
+def print_log(string, args):
+    global log_count
+    if log_count:
+        log_f = open(args.exp_dir / 'train-log.txt', 'a')
+    else:
+        log_f = open(args.exp_dir / 'train-log.txt', 'w')
+
+    print(string)
+    print(string, file=log_f)
+    log_f.close()
+    log_count += 1
+
 def train_epoch(args, epoch, model, data_loader, optimizer, loss_type):
     model.train()
     start_epoch = start_iter = time.perf_counter()
@@ -30,11 +45,12 @@ def train_epoch(args, epoch, model, data_loader, optimizer, loss_type):
         total_loss += loss.item()
 
         if iter % args.report_interval == 0:
-            print(
+            print_log(
                 f'Epoch = [{epoch:3d}/{args.num_epochs:3d}] '
                 f'Iter = [{iter:4d}/{len(data_loader):4d}] '
                 f'Loss = {loss.item():.4g} '
                 f'Time = {time.perf_counter() - start_iter:.4f}s',
+                args
             )
         start_iter = time.perf_counter()
     total_loss = total_loss / len_loader
@@ -92,12 +108,12 @@ def save_model(args, exp_dir, epoch, model, optimizer, best_val_loss, is_new_bes
         shutil.copyfile(exp_dir / 'model.pt', exp_dir / 'best_model.pt')
 
 
-        
+
 def train(args):
     device = torch.device(f'cuda:{args.GPU_NUM}' if torch.cuda.is_available() else 'cpu')
     torch.cuda.set_device(device)
     print('Current cuda device: ', torch.cuda.current_device())
-    
+
     model = Unet(in_chans = args.in_chans, out_chans = args.out_chans)
     model.to(device=device)
     loss_type = SSIMLoss().to(device=device)
@@ -106,13 +122,13 @@ def train(args):
     best_val_loss = 1.
     start_epoch = 0
 
-    
+
     train_loader = create_data_loaders(data_path = args.data_path_train, args = args)
     val_loader = create_data_loaders(data_path = args.data_path_val, args = args)
 
     for epoch in range(start_epoch, args.num_epochs):
-        print(f'Epoch #{epoch:2d} ............... {args.net_name} ...............')
-        
+        print_log(f'Epoch #{epoch:2d} ............... {args.net_name} ...............', args)
+
         train_loss, train_time = train_epoch(args, epoch, model, train_loader, optimizer, loss_type)
         val_loss, num_subjects, reconstructions, targets, inputs, val_time = validate(args, model, val_loader)
 
@@ -122,15 +138,17 @@ def train(args):
         best_val_loss = min(best_val_loss, val_loss)
 
         save_model(args, args.exp_dir, epoch + 1, model, optimizer, best_val_loss, is_new_best)
-        print(
+        print_log(
             f'Epoch = [{epoch:4d}/{args.num_epochs:4d}] TrainLoss = {train_loss:.4g} '
             f'ValLoss = {val_loss:.4g} TrainTime = {train_time:.4f}s ValTime = {val_time:.4f}s',
+            args
         )
 
         if is_new_best:
-            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@NewRecord@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+            print_log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@NewRecord@@@@@@@@@@@@@@@@@@@@@@@@@@@@", args)
             start = time.perf_counter()
             save_reconstructions(reconstructions, args.val_dir, targets=targets, inputs=inputs)
-            print(
+            print_log(
                 f'ForwardTime = {time.perf_counter() - start:.4f}s',
+                args
             )
