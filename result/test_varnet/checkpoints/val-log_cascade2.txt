@@ -1,0 +1,2 @@
+Current cuda device  0
+4 0.04878561863008946

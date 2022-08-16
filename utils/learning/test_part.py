@@ -4,7 +4,7 @@ import torch
 from collections import defaultdict
 from utils.common.utils import save_reconstructions
 from utils.data.load_data import create_data_loaders
-from utils.model.unet import Unet
+from utils.model.varnet import VarNet
 
 import sys
 
@@ -17,26 +17,21 @@ def log_path(args):
 def test(args, model, data_loader):
     model.eval()
     reconstructions = defaultdict(dict)
-    inputs = defaultdict(dict)
 
     with torch.no_grad():
-        for (input, _, _, fnames, slices) in data_loader:
-            input = input.cuda(non_blocking=True)
-            output = model(input)
+        for (mask, kspace, _, _, fnames, slices) in data_loader:
+            kspace = kspace.cuda(non_blocking=True)
+            mask = mask.cuda(non_blocking=True)
+            output = model(kspace, mask)
 
             for i in range(output.shape[0]):
                 reconstructions[fnames[i]][int(slices[i])] = output[i].cpu().numpy()
-                inputs[fnames[i]][int(slices[i])] = input[i].cpu().numpy()
 
     for fname in reconstructions:
         reconstructions[fname] = np.stack(
             [out for _, out in sorted(reconstructions[fname].items())]
         )
-    for fname in inputs:
-        inputs[fname] = np.stack(
-            [out for _, out in sorted(inputs[fname].items())]
-        )
-    return reconstructions, inputs
+    return reconstructions, None
 
 
 def forward(args):
@@ -47,15 +42,15 @@ def forward(args):
     print('Current cuda device ', torch.cuda.current_device())
     print('Current cuda device ', torch.cuda.current_device(), file=log_f)
 
-    model = Unet(in_chans = args.in_chans, out_chans = args.out_chans)
+    model = VarNet(num_cascades=args.cascade, pools=4, chans=18, sens_pools=4, sens_chans=8)
     model.to(device=device)
 
     checkpoint = torch.load(args.exp_dir / 'best_model.pt', map_location='cpu')
-    print(checkpoint['epoch'], checkpoint['best_val_loss'].item())
-    print(checkpoint['epoch'], checkpoint['best_val_loss'].item(), file=log_f)
+    print("epoch: ", checkpoint['epoch'], "best_val_loss: ", checkpoint['best_val_loss'].item())
+    print("epoch: ", checkpoint['epoch'], "best_val_loss: ", checkpoint['best_val_loss'].item(), file=log_f)
     model.load_state_dict(checkpoint['model'])
 
-    forward_loader = create_data_loaders(data_path = args.data_path, args = args, isforward = True)
+    forward_loader = create_data_loaders(data_path=args.data_path, args=args, isforward=True)
     reconstructions, inputs = test(args, model, forward_loader)
     save_reconstructions(reconstructions, args.forward_dir, inputs=inputs)
 
