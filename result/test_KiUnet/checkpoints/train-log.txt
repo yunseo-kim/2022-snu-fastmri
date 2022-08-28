@@ -1,0 +1,26 @@
+Epoch # 0 ............... test_KiUnet ...............
+Epoch = [  0/ 20] Iter = [   0/5676] Loss = 0.6429 Time = 1.0259s
+Epoch = [  0/ 20] Iter = [ 500/5676] Loss = 0.4339 Time = 0.9446s
+Epoch = [  0/ 20] Iter = [1000/5676] Loss = 0.07636 Time = 0.9454s
+Epoch = [  0/ 20] Iter = [1500/5676] Loss = 0.3202 Time = 0.9446s
+Epoch = [  0/ 20] Iter = [2000/5676] Loss = 0.1309 Time = 0.9546s
+Epoch = [  0/ 20] Iter = [2500/5676] Loss = 0.2504 Time = 0.9457s
+Epoch = [  0/ 20] Iter = [3000/5676] Loss = 0.3491 Time = 0.9461s
+Epoch = [  0/ 20] Iter = [3500/5676] Loss = 0.3742 Time = 0.9451s
+Epoch = [  0/ 20] Iter = [4000/5676] Loss = 0.2641 Time = 0.9465s
+Epoch = [  0/ 20] Iter = [4500/5676] Loss = 0.3368 Time = 0.9521s
+Epoch = [  0/ 20] Iter = [5000/5676] Loss = 0.4083 Time = 0.9516s
+Epoch = [  0/ 20] Iter = [5500/5676] Loss = 0.3125 Time = 0.9608s
+Epoch = [   0/  20] TrainLoss = 0.301 ValLoss = 0.293 TrainTime = 5394.6476s ValTime = 421.5245s
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@NewRecord@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ForwardTime = 0.6795s
+Epoch # 1 ............... test_KiUnet ...............
+Epoch = [  1/ 20] Iter = [   0/5676] Loss = 0.3523 Time = 1.3750s
+Epoch = [  1/ 20] Iter = [ 500/5676] Loss = 0.4134 Time = 0.9421s
+Epoch = [  1/ 20] Iter = [1000/5676] Loss = 0.06777 Time = 0.9289s
+Epoch = [  1/ 20] Iter = [1500/5676] Loss = 0.3093 Time = 0.9323s
+Epoch = [  1/ 20] Iter = [2000/5676] Loss = 0.1282 Time = 0.9427s
+Epoch = [  1/ 20] Iter = [2500/5676] Loss = 0.2453 Time = 0.9479s
+Epoch = [  1/ 20] Iter = [3000/5676] Loss = 0.3419 Time = 0.9571s
+Epoch = [  1/ 20] Iter = [3500/5676] Loss = 0.3655 Time = 0.9360s
+Epoch = [  1/ 20] Iter = [4000/5676] Loss = 0.2609 Time = 0.9406s
