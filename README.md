@@ -5,7 +5,7 @@
 ### Team Members
 | Name | Department | Year | GitHub |
 |------|------------|-------------------------------|--------|
-|Yunseo Kim|[Nuclear Engineering](https://nucleng.snu.ac.kr/)|sophomore|[@yunseo-qleap](https://github.com/yunseo-qleap)
+|Yunseo Kim|[Nuclear Engineering](https://nucleng.snu.ac.kr/)|sophomore|[@yunseo-kim](https://github.com/yunseo-kim)
 |Yongho Lee|[Nuclear Engineering](https://nucleng.snu.ac.kr/)|freshman|[@r3ytv333](https://github.com/r3ytv333)
 
 ## About [fastMRI](https://fastmri.org/)
